@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: blueman 2.2\n"
 "Report-Msgid-Bugs-To: https://github.com/blueman-project/blueman/issues\n"
-"POT-Creation-Date: 2020-11-25 01:32+0100\n"
+"POT-Creation-Date: 2020-11-26 09:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2077,7 +2077,7 @@ msgid "Shows network traffic usage"
 msgstr ""
 
 #: blueman/plugins/applet/StatusIcon.py:42
-#: blueman/plugins/applet/ShowConnected.py:72
+#: blueman/plugins/applet/ShowConnected.py:71
 #: blueman/plugins/applet/PowerManager.py:189
 msgid "Bluetooth Enabled"
 msgstr ""
@@ -2284,14 +2284,14 @@ msgstr ""
 msgid "Bluetooth Active"
 msgstr ""
 
-#: blueman/plugins/applet/ShowConnected.py:64
+#: blueman/plugins/applet/ShowConnected.py:63
 #, python-format
 msgid "<b>%(connections)d Active Connection</b>"
 msgid_plural "<b>%(connections)d Active Connections</b>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: blueman/plugins/applet/ShowConnected.py:74
+#: blueman/plugins/applet/ShowConnected.py:73
 #: blueman/plugins/applet/PowerManager.py:192
 msgid "Bluetooth Disabled"
 msgstr ""
