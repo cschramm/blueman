@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: blueman 2.2\n"
 "Report-Msgid-Bugs-To: https://github.com/blueman-project/blueman/issues\n"
-"POT-Creation-Date: 2020-11-26 09:36+0100\n"
+"POT-Creation-Date: 2020-11-26 09:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2296,7 +2296,7 @@ msgstr[1] ""
 msgid "Bluetooth Disabled"
 msgstr ""
 
-#: blueman/plugins/applet/AppIndicator.py:17
+#: blueman/plugins/applet/AppIndicator.py:19
 msgid "Uses libappindicator to show a statusicon"
 msgstr ""
 
@@ -2436,7 +2436,7 @@ msgid ""
 "connected."
 msgstr ""
 
-#: blueman/plugins/applet/StatusNotifierItem.py:8
+#: blueman/plugins/applet/StatusNotifierItem.py:10
 msgid "Provides a StatusNotifierItem to show a statusicon"
 msgstr ""
 
