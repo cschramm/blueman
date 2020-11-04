@@ -45,6 +45,11 @@ class BluemanApplet(Gio.Application):
         self._any_device = AnyDevice()
         self._any_device.connect_signal('property-changed', self._on_device_property_changed)
 
+    def do_startup(self) -> None:
+        quit_action = Gio.SimpleAction.new("Quit", None)
+        quit_action.connect("activate", lambda _action, _param: self.quit())
+        self.add_action(quit_action)
+
     def do_activate(self) -> None:
         if not self._active:
             self.hold()

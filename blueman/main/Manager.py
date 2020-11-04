@@ -14,7 +14,7 @@ from blueman.gui.manager.ManagerStats import ManagerStats
 from blueman.gui.manager.ManagerProgressbar import ManagerProgressbar
 from blueman.main.Builder import Builder
 from blueman.main.Config import Config
-from blueman.main.DBusProxies import AppletService, DBusProxyFailed
+from blueman.main.DBusProxies import AppletService, DBusProxyFailed, DBus, AppletServiceApplication
 from blueman.gui.CommonUi import ErrorDialog
 from blueman.gui.MessageArea import MessageArea
 from blueman.gui.Notification import Notification
@@ -31,6 +31,7 @@ from gi.repository import Gtk, Gio, Gdk, GLib
 class Blueman(Gtk.Application):
     def __init__(self) -> None:
         super().__init__(application_id="org.blueman.Manager")
+        self._applet_was_running = DBus().NameHasOwner("(s)", AppletService.NAME)
 
     window: Optional[Gtk.ApplicationWindow]
 
@@ -47,6 +48,12 @@ class Blueman(Gtk.Application):
         quit_action.connect("activate", doquit)
         self.set_accels_for_action("app.Quit", ["<Ctrl>q", "<Ctrl>w"])
         self.add_action(quit_action)
+
+    def do_shutdown(self) -> None:
+        Gtk.Application.do_shutdown(self)
+
+        if not self._applet_was_running:
+            AppletServiceApplication().stop()
 
     def do_activate(self) -> None:
         if not self.window:
