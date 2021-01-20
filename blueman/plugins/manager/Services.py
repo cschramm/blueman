@@ -54,13 +54,13 @@ class Services(ManagerPlugin, MenuItemsProvider):
             if service.connected:
                 surface = self._make_x_icon(service.icon, 16)
                 item = create_menuitem(service.name, surface=surface)
-                item.connect("activate", manager_menu.on_disconnect, service)
+                item.connect("activate", lambda _item: manager_menu.disconnect_service(service.device, service.uuid))
                 items.append((item, service.priority + 100))
             else:
                 item = create_menuitem(service.name, service.icon)
                 if service.description:
                     item.props.tooltip_text = service.description
-                item.connect("activate", manager_menu.on_connect, service)
+                item.connect("activate", lambda _item: manager_menu.connect_service(service.device, service.uuid))
                 if isinstance(service, SerialService):
                     serial_items.append(item)
                     if isinstance(service, DialupNetwork):
@@ -80,7 +80,8 @@ class Services(ManagerPlugin, MenuItemsProvider):
 
                         surface = self._make_x_icon("modem", 16)
                         item: Gtk.MenuItem = create_menuitem(devname, surface=surface)
-                        item.connect("activate", manager_menu.on_disconnect, service, dev["id"])
+                        item.connect("activate", lambda _item: manager_menu.disconnect_service(
+                            service.device, service.uuid, dev["id"]))
                         items.append((item, 120))
                         item.show()
 
