@@ -41,7 +41,7 @@ class ManagerProgressbar(GObject.GObject):
 
         self.eventbox = eventbox = Gtk.EventBox()
         eventbox.add(self.button)
-        eventbox.props.tooltip_text = _("Cancel Operation")
+        eventbox.props.tooltip_text = _("Stop")
         eventbox.connect("enter-notify-event", self._on_enter)
         eventbox.connect("leave-notify-event", self._on_leave)
         eventbox.connect("button-press-event", self._on_clicked)
@@ -159,10 +159,6 @@ class ManagerProgressbar(GObject.GObject):
 
     def set_label(self, label: str) -> None:
         self.progressbar.props.text = label
-
-    def fraction(self, frac: float) -> None:
-        if not self.finalized:
-            self.progressbar.set_fraction(frac)
 
     def started(self) -> bool:
         return self.pulsing

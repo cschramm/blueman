@@ -11,7 +11,6 @@ from blueman.bluez.Adapter import Adapter, AnyAdapter
 from blueman.bluez.errors import DBusNoSuchAdapterError, BluezDBusException
 
 from gi.repository import GObject
-from gi.repository import GLib
 
 import gi
 
@@ -30,8 +29,6 @@ class DeviceList(GenericList):
         'device-property-changed': (GObject.SignalFlags.RUN_LAST, None, (Device, Gtk.TreeIter, object,)),
         # @param: adapter, (key, value)
         'adapter-property-changed': (GObject.SignalFlags.RUN_LAST, None, (Adapter, object,)),
-        # @param: progress (0 to 1)
-        'discovery-progress': (GObject.SignalFlags.RUN_LAST, None, (float,)),
 
         # @param: new adapter path, None if there are no more adapters
         'adapter-changed': (GObject.SignalFlags.RUN_LAST, None, (str,)),
@@ -63,7 +60,6 @@ class DeviceList(GenericList):
         self.any_device = AnyDevice()
         self._anydevhandler = self.any_device.connect_signal("property-changed", self._on_device_property_changed)
 
-        self.__discovery_time: float = 0
         self.__adapter_path: Optional[str] = None
         self.Adapter: Optional[Adapter] = None
         self.discovering = False
@@ -204,22 +200,6 @@ class DeviceList(GenericList):
 
         self.emit("adapter-changed", self.__adapter_path)
 
-    def update_progress(self, time: float, totaltime: float) -> bool:
-        if not self.discovering:
-            return False
-
-        self.__discovery_time += time
-
-        progress = self.__discovery_time / totaltime
-        if progress >= 1.0:
-            progress = 1.0
-        if self.__discovery_time >= totaltime:
-            self.stop_discovery()
-            return False
-
-        self.emit("discovery-progress", progress)
-        return True
-
     def add_device(self, object_path: str) -> None:
         device = Device(obj_path=object_path)
         # device belongs to another adapter
@@ -245,15 +225,10 @@ class DeviceList(GenericList):
         self.clear()
         self.manager.populate_devices()
 
-    def discover_devices(self, time: float = 60.0,
-                         error_handler: Optional[Callable[[BluezDBusException], None]] = None) -> None:
-        if not self.discovering:
-            self.__discovery_time = 0
-            if self.Adapter is not None:
-                self.Adapter.start_discovery(error_handler=error_handler)
-                self.discovering = True
-                t = 1.0 / 15 * 1000
-                GLib.timeout_add(int(t), self.update_progress, t / 1000, time)
+    def discover_devices(self, error_handler: Optional[Callable[[BluezDBusException], None]] = None) -> None:
+        if not self.discovering and self.Adapter is not None:
+            self.Adapter.start_discovery(error_handler=error_handler)
+            self.discovering = True
 
     def is_valid_adapter(self) -> bool:
         if self.Adapter is None:

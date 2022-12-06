@@ -185,18 +185,10 @@ class Blueman(Gtk.Application):
             key, value = key_value
             if key == "Discovering" and not value:
                 prog.finalize()
-
-                self.List.disconnect(s1)
-                self.List.disconnect(s2)
-
-        def on_progress(_lst: ManagerDeviceList, frac: float) -> None:
-            if abs(1.0 - frac) <= 0.00001:
-                if not prog.started():
-                    prog.start()
-            else:
-                prog.fraction(frac)
+                self.List.disconnect(sig)
 
         prog = ManagerProgressbar(self, text=_("Searching"))
+        prog.start()
         prog.connect("cancelled", lambda x: self.List.stop_discovery())
 
         def on_error(e: Exception) -> None:
@@ -205,8 +197,7 @@ class Blueman(Gtk.Application):
 
         self.List.discover_devices(error_handler=on_error)
 
-        s1 = self.List.connect("discovery-progress", on_progress)
-        s2 = self.List.connect("adapter-property-changed", prop_changed)
+        sig = self.List.connect("adapter-property-changed", prop_changed)
 
     def infobar_update(self, message: str, bt: Optional[str] = None, icon_name: str = "dialog-warning") -> None:
         if icon_name == "dialog-warning":
